@@ -1,0 +1,8 @@
+Para buildar o container, rodar dentro da pasta com o Dockerfile:
+docker image build -t yamada .
+
+Para rodar o container, lembrar de mapear a porta 8080 para 80 e de configurar a rede para host
+docker run --rm --name yamada -it --network host yamada
+
+Se quiser acessar o terminal do container rodando:
+docker exec -it yamada bash

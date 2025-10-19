@@ -1,0 +1,82 @@
+[
+    {
+        "action": "color",
+        "position": [
+            0.5365296803652968,
+            0.22704081632653061
+        ],
+        "value": [
+            255,
+            255,
+            255
+        ]
+    },
+    {
+        "action": "click",
+        "position": [
+            0.7876923076923077,
+            0.3970209809264305
+        ],
+        "condition": null
+    },
+    {
+        "action": "click",
+        "position": [
+            0.5576923076923077,
+            0.3869209809264305
+        ],
+        "condition": null
+    },
+    {
+        "action": "write",
+        "position": [
+            0,
+            0
+        ],
+        "value": "$USER"
+    },
+    {
+        "action": "click",
+        "position": [
+            0.32211538461538464,
+            0.4986376021798365
+        ],
+        "condition": null
+    },
+    {
+        "action": "click",
+        "position": [
+            0.32211538461538464,
+            0.4986376021798365
+        ],
+        "condition": null
+    },
+    {
+        "action": "write",
+        "position": [
+            0,
+            0
+        ],
+        "value": "$PASSWORD"
+    },
+    {
+        "action": "click",
+        "position": [
+            0.7451923076923077,
+            0.6457765667574932
+        ],
+        "condition": null
+    },
+    {
+        "action": "color",
+        "position": [
+            0.9350961538461539,
+            0.3310626702997275
+        ],
+        "value": [
+            0,
+            27,
+            30
+        ]
+    }
+]

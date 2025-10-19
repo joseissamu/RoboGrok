@@ -1,0 +1,812 @@
+# Robo Yamada
+## Introdução / Objetivo
+O Robo Yamada é um sistema criado para automatizar ações do aplicativo Pppoker. O robô é dividido em duas partes – passiva e ativa – além de ter um detector de comandos, os quais serão repassados para o robô.
+
+#### Modos do Robô:
+- **Passivo**: Recebe o comando “read”. Encontra as limitações da tela determinadas no comando, tira um print da tela e busca informações presentes, convertendo-as para texto, e armazena esses dados.
+- **Ativo**: (TODO) Interagirá com a Aba Counter do aplicativo para executar transações de fichas.
+
+---
+
+## Como usar
+### Configurando o Ambiente
+Instale as dependências necessárias com o seguinte comando:
+
+```bash
+pip install -r requirements.txt
+```
+---
+```mermaid
+flowchart TD
+    subgraph Detector[commandDetector.py]
+    A[Início do Detector]
+    B[Captura ações do usuário]
+    C[Para cada ação:<br> - Atualiza JSON]
+    D[Fim da gravação<br>Salva JSON com<br>mapeamento completo]
+    end
+    A --> B --> C --> D
+    D --> Txt1[AppModoOperação1<br>Nav / Act / Return.txt]
+    D --> Txt2[AppModoOperação2<br>Nav / Act / Return.txt]
+    D --> TxtN[AppModoOperaçãoN<br>Nav / Act / Return.txt]
+    
+    subgraph Robo[API Call]
+    E[Início do Robôs, rodam o AppModoBase]
+    F[Chamada API:<br>define mapeamentos e variáveis]
+    G[Comando distribuido Celery para os Robôs]
+    H{Está na mesma aba que o robô?}
+    I[Executa comandos<br>de Return e Nav]
+    J[Executa comandos<br>de Act]
+    K{Ainda há comandos<br>para processar?}
+    L[Fim da execução]
+    end
+    E --> G
+    F --> G
+    G --> H
+    H -- Não --> I --> J
+    H -- Sim --> J
+    J --> K
+    K -- Sim --> H
+    K -- Não --> L
+
+    G <--> Txt1
+    G <--> Txt2
+    G <--> TxtN
+
+```
+
+
+### Detecção de Comandos
+Para iniciar o detector de comandos, execute:
+
+```bash
+python -m commandDetector
+```
+
+---
+
+O detector recebe o aplicativo, o modo de detecção (passivo ou ativo – cada um com sua rotina específica) e aguarda as entradas do usuário.
+
+#### Lista de modos de detecção:
+- **Click**: Detecta a posição de cliques na tela.
+- **Text**: Enquanto ativo, detecta texto escrito até o modo ser desativado.
+- **Color**: Detecta a cor do pixel na posição selecionada (com Shift).
+- **Read**: Lê texto dentro da caixa determinada por duas posições (detectadas com Shift).
+
+#### Lista de ativação de detecção, por modo:
+- **Geral**:
+  - `Alt`: Termina o processo.
+  - `Ctrl`: Altera o modo de detecção.
+- **Click**:
+  - `Clique`: Salva a posição.
+- **Text**:
+  - `Esc`: Ativa/desativa o modo.
+  - `Caracteres`: Salva o texto escrito.
+- **Color**:
+  - `Shift`: Salva a cor do pixel na posição do mouse.
+- **Read**:
+  - `Shift 2x`: Salva as duas posições do mouse (uma para cada Shift) que determinam a caixa de leitura.
+
+### Executando o Robô
+Para iniciar o robô, execute:
+
+```bash
+python -m main
+```
+O robô encontra o caminho do app, seleciona o modo (passivo ou ativo) e o executa.
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------
+Below, the result of tree /F /A > dir_tree.txt
+
+Folder PATH listing for volume OS
+Volume serial number is 082A-CE06
+C:.
+|   .dmypy.json
+|   .env
+|   .gitignore
+|   beat_schedule_test.py
+|   celerybeat-schedule.bak
+|   celerybeat-schedule.dat
+|   celerybeat-schedule.dir
+|   commandDetector.py
+|   como_rodar_o_celery.txt
+|   Constants.py
+|   códigos Yamada.zip
+|   dir_tree.txt
+|   docker-compose.yml
+|   gui_lock.py
+|   index.py
+|   main.py
+|   MappingRemapping.py
+|   missclickHandler.py
+|   overlayCreator.py
+|   PPPOKER.lnk
+|   quick_test.py
+|   README.md
+|   README_TESTES.md
+|   remaining_pyc.txt
+|   requirements.txt
+|   robo.py
+|   run.bat
+|   setup_nginxconf.py
+|   startCelery.bat
+|   startNginx.bat
+|   SupremaPoker.lnk
+|   task.py
+|   test_task_buffer.py
+|   utils.py
+|   webhook_receiver.py
+|   Yamada.code-workspace
+|   
++---dev_api_container
+|   |   comandos_docker.txt
+|   |   configurar_nginx_container_yamada.txt
+|   |   teste.py
+|   |   
+|   \---api_container_image
+|       |   default.conf.j2
+|       |   Dockerfile
+|       |   setup.py
+|       |   
+|       \---html
+|               index.html
+|               
++---log
+|   +---Pppoker
+|   |   +---17.10.2025
+|   |   |       Base_15.05.37.log
+|   |   |       Base_15.08.26.log
+|   |   |       Base_15.11.11.log
+|   |   |       Base_15.16.12.log
+|   |   |       Base_15.19.20.log
+|   |   |       Base_15.21.16.log
+|   |   |       Base_15.24.38.log
+|   |   |       Base_15.36.19.log
+|   |   |       Base_15.39.20.log
+|   |   |       Base_15.40.44.log
+|   |   |       Receive_chips_15.15.21.log
+|   |   |       Receive_chips_15.17.00.log
+|   |   |       Receive_chips_15.20.10.log
+|   |   |       Receive_chips_15.23.17.log
+|   |   |       Send_chips_15.05.59.log
+|   |   |       Send_chips_15.11.40.log
+|   |   |       Send_chips_15.11.57.log
+|   |   |       Send_chips_15.14.45.log
+|   |   |       Send_chips_15.15.01.log
+|   |   |       Send_chips_15.16.40.log
+|   |   |       Send_chips_15.19.50.log
+|   |   |       Send_chips_15.21.45.log
+|   |   |       Send_chips_15.22.01.log
+|   |   |       Send_chips_15.22.57.log
+|   |   |       Send_chips_15.25.06.log
+|   |   |       Send_chips_15.25.23.log
+|   |   |       Send_chips_15.26.16.log
+|   |   |       Send_chips_15.26.32.log
+|   |   |       Send_chips_15.26.48.log
+|   |   |       Send_chips_15.28.31.log
+|   |   |       Send_chips_15.28.47.log
+|   |   |       Send_chips_15.29.03.log
+|   |   |       Send_chips_15.32.49.log
+|   |   |       Send_chips_15.33.06.log
+|   |   |       Send_chips_15.33.53.log
+|   |   |       Send_chips_15.36.35.log
+|   |   |       Send_chips_15.39.35.log
+|   |   |       Send_chips_15.41.13.log
+|   |   |       Send_chips_15.41.30.log
+|   |   |       Send_chips_15.41.49.log
+|   |   |       Send_chips_15.42.06.log
+|   |   |       Send_chips_15.42.22.log
+|   |   |       Send_chips_15.42.45.log
+|   |   |       Send_chips_15.43.02.log
+|   |   |       
+|   |   \---18.08.2025
+|   |           Base_01.04.00.log
+|   |           Base_01.04.57.log
+|   |           Base_01.06.10.log
+|   |           Base_01.09.01.log
+|   |           Base_02.23.55.log
+|   |           Base_02.25.21.log
+|   |           Base_02.32.37.log
+|   |           Base_16.40.46.log
+|   |           Base_16.41.38.log
+|   |           Base_17.00.27.log
+|   |           Base_17.33.49.log
+|   |           Base_17.38.34.log
+|   |           Base_17.40.35.log
+|   |           Send_chips_01.05.18.log
+|   |           Send_chips_01.06.29.log
+|   |           Send_chips_01.09.21.log
+|   |           Send_chips_01.09.31.log
+|   |           Send_chips_02.24.12.log
+|   |           Send_chips_02.25.49.log
+|   |           Send_chips_02.33.02.log
+|   |           Send_chips_16.40.59.log
+|   |           Send_chips_16.41.58.log
+|   |           Send_chips_16.42.08.log
+|   |           Send_chips_16.42.18.log
+|   |           Send_chips_16.42.28.log
+|   |           Send_chips_16.42.38.log
+|   |           Send_chips_16.42.47.log
+|   |           Send_chips_16.42.48.log
+|   |           Send_chips_16.42.57.log
+|   |           Send_chips_16.43.07.log
+|   |           Send_chips_16.43.08.log
+|   |           Send_chips_16.43.17.log
+|   |           Send_chips_16.43.27.log
+|   |           Send_chips_16.43.48.log
+|   |           Send_chips_16.43.57.log
+|   |           Send_chips_16.44.06.log
+|   |           Send_chips_16.44.07.log
+|   |           Send_chips_16.44.17.log
+|   |           Send_chips_16.44.26.log
+|   |           Send_chips_16.44.27.log
+|   |           Send_chips_16.44.36.log
+|   |           Send_chips_16.44.46.log
+|   |           Send_chips_16.44.55.log
+|   |           Send_chips_16.44.56.log
+|   |           Send_chips_16.45.05.log
+|   |           Send_chips_16.45.15.log
+|   |           Send_chips_16.45.25.log
+|   |           Send_chips_16.45.34.log
+|   |           Send_chips_16.45.35.log
+|   |           Send_chips_16.45.44.log
+|   |           Send_chips_16.45.54.log
+|   |           Send_chips_16.46.17.log
+|   |           Send_chips_16.46.26.log
+|   |           Send_chips_16.46.36.log
+|   |           Send_chips_16.46.45.log
+|   |           Send_chips_16.46.55.log
+|   |           Send_chips_16.47.05.log
+|   |           Send_chips_16.47.15.log
+|   |           Send_chips_16.47.25.log
+|   |           Send_chips_16.47.34.log
+|   |           Send_chips_16.47.35.log
+|   |           Send_chips_16.47.44.log
+|   |           Send_chips_16.47.54.log
+|   |           Send_chips_16.48.04.log
+|   |           Send_chips_16.48.13.log
+|   |           Send_chips_16.48.14.log
+|   |           Send_chips_16.48.23.log
+|   |           Send_chips_16.48.32.log
+|   |           Send_chips_16.48.33.log
+|   |           Send_chips_16.48.42.log
+|   |           Send_chips_16.48.52.log
+|   |           Send_chips_16.49.01.log
+|   |           Send_chips_16.49.02.log
+|   |           Send_chips_16.49.11.log
+|   |           Send_chips_16.49.21.log
+|   |           Send_chips_16.49.30.log
+|   |           Send_chips_16.49.40.log
+|   |           Send_chips_16.49.50.log
+|   |           Send_chips_16.50.00.log
+|   |           Send_chips_16.50.09.log
+|   |           Send_chips_16.50.19.log
+|   |           Send_chips_16.50.29.log
+|   |           Send_chips_16.50.38.log
+|   |           Send_chips_16.50.48.log
+|   |           Send_chips_16.50.58.log
+|   |           Send_chips_16.51.08.log
+|   |           Send_chips_16.51.17.log
+|   |           Send_chips_16.51.18.log
+|   |           Send_chips_16.51.27.log
+|   |           Send_chips_16.51.37.log
+|   |           Send_chips_16.51.46.log
+|   |           Send_chips_16.51.56.log
+|   |           Send_chips_16.52.05.log
+|   |           Send_chips_16.52.15.log
+|   |           Send_chips_16.52.24.log
+|   |           Send_chips_16.52.25.log
+|   |           Send_chips_16.52.34.log
+|   |           Send_chips_16.52.43.log
+|   |           Send_chips_16.52.44.log
+|   |           Send_chips_16.52.53.log
+|   |           Send_chips_16.53.03.log
+|   |           Send_chips_16.53.13.log
+|   |           Send_chips_16.53.22.log
+|   |           Send_chips_16.53.32.log
+|   |           Send_chips_16.53.42.log
+|   |           Send_chips_16.53.51.log
+|   |           Send_chips_16.53.52.log
+|   |           Send_chips_16.54.01.log
+|   |           Send_chips_16.54.11.log
+|   |           Send_chips_16.54.21.log
+|   |           Send_chips_16.54.31.log
+|   |           Send_chips_16.54.40.log
+|   |           Send_chips_16.54.50.log
+|   |           Send_chips_16.54.59.log
+|   |           Send_chips_16.55.00.log
+|   |           Send_chips_16.55.09.log
+|   |           Send_chips_16.55.19.log
+|   |           Send_chips_16.55.28.log
+|   |           Send_chips_16.55.29.log
+|   |           Send_chips_16.55.38.log
+|   |           Send_chips_16.55.48.log
+|   |           Send_chips_16.55.58.log
+|   |           Send_chips_16.56.08.log
+|   |           Send_chips_16.56.17.log
+|   |           Send_chips_16.56.27.log
+|   |           Send_chips_16.56.36.log
+|   |           Send_chips_16.56.37.log
+|   |           Send_chips_16.56.46.log
+|   |           Send_chips_16.56.56.log
+|   |           Send_chips_16.57.06.log
+|   |           Send_chips_16.57.15.log
+|   |           Send_chips_16.57.16.log
+|   |           Send_chips_16.57.25.log
+|   |           Send_chips_16.57.35.log
+|   |           Send_chips_16.57.44.log
+|   |           Send_chips_16.57.54.log
+|   |           Send_chips_16.58.04.log
+|   |           Send_chips_16.58.14.log
+|   |           Send_chips_16.58.23.log
+|   |           Send_chips_16.58.24.log
+|   |           Send_chips_16.58.33.log
+|   |           Send_chips_16.58.43.log
+|   |           Send_chips_17.00.40.log
+|   |           Send_chips_17.00.50.log
+|   |           Send_chips_17.01.05.log
+|   |           Send_chips_17.38.50.log
+|   |           Send_chips_17.39.10.log
+|   |           Send_chips_17.39.21.log
+|   |           Send_chips_17.40.55.log
+|   |           Send_chips_17.41.04.log
+|   |           Send_chips_17.41.14.log
+|   |           Send_chips_17.41.23.log
+|   |           Send_chips_17.41.24.log
+|   |           Send_chips_17.41.33.log
+|   |           Send_chips_17.41.43.log
+|   |           Send_chips_17.41.53.log
+|   |           Send_chips_17.42.03.log
+|   |           Send_chips_17.42.12.log
+|   |           Send_chips_17.42.13.log
+|   |           Send_chips_17.42.22.log
+|   |           
+|   \---Supremapoker
+|       +---17.10.2025
+|       |       Base_15.02.25.log
+|       |       Base_15.29.20.log
+|       |       Base_15.36.40.log
+|       |       Base_15.46.18.log
+|       |       Receive_chips_15.04.00.log
+|       |       Receive_chips_15.33.22.log
+|       |       Receive_chips_15.47.22.log
+|       |       Receive_chips_15.48.13.log
+|       |       Send_chips_15.03.01.log
+|       |       Send_chips_15.04.21.log
+|       |       Send_chips_15.29.37.log
+|       |       Send_chips_15.30.13.log
+|       |       Send_chips_15.33.38.log
+|       |       Send_chips_15.36.56.log
+|       |       Send_chips_15.46.55.log
+|       |       Send_chips_15.47.43.log
+|       |       Send_chips_15.48.29.log
+|       |       Send_chips_15.49.05.log
+|       |       
+|       \---22.08.2025
+|               Base_14.22.17.log
+|               Base_14.24.35.log
+|               Base_14.30.44.log
+|               Base_14.34.06.log
+|               Base_14.36.19.log
+|               Base_14.52.15.log
+|               Base_15.02.06.log
+|               Base_15.12.14.log
+|               Base_15.14.18.log
+|               Base_15.17.27.log
+|               Base_15.20.41.log
+|               Base_15.23.11.log
+|               Base_15.25.36.log
+|               Base_15.30.19.log
+|               Base_16.11.56.log
+|               Base_16.47.13.log
+|               Base_16.48.16.log
+|               Base_17.08.17.log
+|               Base_17.10.31.log
+|               Receive_chips_14.22.35.log
+|               Receive_chips_14.25.04.log
+|               Receive_chips_14.25.40.log
+|               Receive_chips_14.25.53.log
+|               Receive_chips_14.31.20.log
+|               Receive_chips_14.32.27.log
+|               Receive_chips_16.12.28.log
+|               Receive_chips_16.12.42.log
+|               Receive_chips_16.12.56.log
+|               Receive_chips_16.13.11.log
+|               Receive_chips_16.13.25.log
+|               Receive_chips_16.13.39.log
+|               Receive_chips_16.13.54.log
+|               Receive_chips_16.14.08.log
+|               Receive_chips_16.14.23.log
+|               Receive_chips_16.14.37.log
+|               Receive_chips_16.14.52.log
+|               Receive_chips_16.15.06.log
+|               Receive_chips_16.15.21.log
+|               Receive_chips_16.15.35.log
+|               Receive_chips_16.15.49.log
+|               Receive_chips_16.16.04.log
+|               Receive_chips_16.16.18.log
+|               Receive_chips_16.16.32.log
+|               Receive_chips_16.16.47.log
+|               Receive_chips_16.17.01.log
+|               Receive_chips_16.17.15.log
+|               Receive_chips_16.17.30.log
+|               Receive_chips_16.17.44.log
+|               Receive_chips_16.17.59.log
+|               Receive_chips_16.18.13.log
+|               Receive_chips_16.18.27.log
+|               Receive_chips_16.18.42.log
+|               Receive_chips_16.18.56.log
+|               Receive_chips_16.19.11.log
+|               Receive_chips_16.19.25.log
+|               Receive_chips_16.19.40.log
+|               Receive_chips_16.19.54.log
+|               Receive_chips_16.20.09.log
+|               Receive_chips_16.20.23.log
+|               Receive_chips_16.20.37.log
+|               Receive_chips_16.20.52.log
+|               Receive_chips_16.21.07.log
+|               Receive_chips_16.21.21.log
+|               Receive_chips_16.21.35.log
+|               Receive_chips_16.21.50.log
+|               Receive_chips_16.22.04.log
+|               Receive_chips_16.22.19.log
+|               Receive_chips_17.11.01.log
+|               Receive_chips_17.11.15.log
+|               Receive_chips_17.11.30.log
+|               Receive_chips_17.11.45.log
+|               Receive_chips_17.11.59.log
+|               Receive_chips_17.12.14.log
+|               Receive_chips_17.12.28.log
+|               Receive_chips_17.12.42.log
+|               Receive_chips_17.12.57.log
+|               Send_chips_14.37.00.log
+|               Send_chips_14.37.25.log
+|               Send_chips_14.37.50.log
+|               Send_chips_14.38.16.log
+|               Send_chips_14.38.41.log
+|               Send_chips_14.38.57.log
+|               Send_chips_14.39.34.log
+|               Send_chips_14.40.04.log
+|               Send_chips_14.40.35.log
+|               Send_chips_14.53.01.log
+|               Send_chips_14.53.32.log
+|               Send_chips_14.54.04.log
+|               Send_chips_14.54.29.log
+|               Send_chips_14.54.54.log
+|               Send_chips_14.55.19.log
+|               Send_chips_14.55.44.log
+|               Send_chips_14.56.15.log
+|               Send_chips_14.56.40.log
+|               Send_chips_14.57.05.log
+|               Send_chips_14.57.30.log
+|               Send_chips_14.57.56.log
+|               Send_chips_14.58.27.log
+|               Send_chips_14.58.58.log
+|               Send_chips_15.13.01.log
+|               Send_chips_15.14.53.log
+|               Send_chips_15.14.54.log
+|               Send_chips_15.18.13.log
+|               Send_chips_15.18.14.log
+|               Send_chips_15.21.11.log
+|               Send_chips_15.21.12.log
+|               Send_chips_15.21.32.log
+|               Send_chips_15.23.47.log
+|               Send_chips_15.24.02.log
+|               Send_chips_15.26.06.log
+|               Send_chips_15.26.07.log
+|               Send_chips_15.26.21.log
+|               Send_chips_15.30.56.log
+|               Send_chips_15.31.17.log
+|               Send_chips_15.31.38.log
+|               Send_chips_15.31.53.log
+|               Send_chips_15.32.09.log
+|               Send_chips_15.32.24.log
+|               Send_chips_15.32.39.log
+|               Send_chips_15.32.59.log
+|               Send_chips_15.33.15.log
+|               Send_chips_15.33.30.log
+|               Send_chips_15.33.45.log
+|               Send_chips_15.34.01.log
+|               Send_chips_15.34.15.log
+|               Send_chips_15.34.31.log
+|               Send_chips_15.34.46.log
+|               Send_chips_15.35.01.log
+|               Send_chips_15.35.16.log
+|               Send_chips_15.35.31.log
+|               Send_chips_15.35.52.log
+|               Send_chips_15.36.07.log
+|               Send_chips_15.36.23.log
+|               Send_chips_15.36.44.log
+|               Send_chips_15.37.04.log
+|               Send_chips_15.37.25.log
+|               Send_chips_15.37.40.log
+|               Send_chips_15.38.01.log
+|               Send_chips_15.38.16.log
+|               Send_chips_15.38.31.log
+|               Send_chips_15.38.46.log
+|               Send_chips_15.39.01.log
+|               Send_chips_15.39.16.log
+|               Send_chips_15.39.31.log
+|               Send_chips_15.39.46.log
+|               Send_chips_15.40.01.log
+|               Send_chips_15.40.15.log
+|               Send_chips_15.40.30.log
+|               Send_chips_15.40.45.log
+|               Send_chips_15.41.00.log
+|               Send_chips_15.41.15.log
+|               Send_chips_15.41.30.log
+|               Send_chips_15.41.45.log
+|               Send_chips_15.42.00.log
+|               Send_chips_15.42.21.log
+|               Send_chips_15.42.42.log
+|               Send_chips_15.43.03.log
+|               Send_chips_15.43.18.log
+|               Send_chips_15.43.39.log
+|               Send_chips_15.43.54.log
+|               Send_chips_15.44.09.log
+|               Send_chips_15.44.24.log
+|               Send_chips_15.44.39.log
+|               Send_chips_15.45.00.log
+|               Send_chips_15.45.15.log
+|               Send_chips_15.45.36.log
+|               Send_chips_15.45.51.log
+|               Send_chips_15.46.06.log
+|               Send_chips_15.46.21.log
+|               Send_chips_15.46.35.log
+|               Send_chips_15.46.50.log
+|               Send_chips_15.47.05.log
+|               Send_chips_15.47.20.log
+|               Send_chips_15.47.36.log
+|               Send_chips_15.47.51.log
+|               Send_chips_15.48.11.log
+|               Send_chips_15.48.32.log
+|               Send_chips_15.48.53.log
+|               Send_chips_15.49.08.log
+|               Send_chips_15.49.29.log
+|               Send_chips_15.49.44.log
+|               Send_chips_15.49.59.log
+|               Send_chips_15.50.14.log
+|               Send_chips_15.50.29.log
+|               Send_chips_15.50.50.log
+|               Send_chips_15.51.05.log
+|               Send_chips_15.51.26.log
+|               Send_chips_15.51.41.log
+|               Send_chips_15.51.56.log
+|               Send_chips_15.52.11.log
+|               Send_chips_15.52.26.log
+|               Send_chips_15.52.41.log
+|               Send_chips_15.52.56.log
+|               Send_chips_15.53.17.log
+|               Send_chips_15.53.32.log
+|               Send_chips_15.53.47.log
+|               Send_chips_15.54.02.log
+|               Send_chips_15.54.23.log
+|               Send_chips_15.54.38.log
+|               Send_chips_15.54.53.log
+|               Send_chips_15.55.08.log
+|               Send_chips_15.55.23.log
+|               Send_chips_15.55.38.log
+|               Send_chips_15.55.53.log
+|               Send_chips_15.56.08.log
+|               Send_chips_15.56.23.log
+|               Send_chips_15.56.38.log
+|               Send_chips_15.56.53.log
+|               Send_chips_15.57.14.log
+|               Send_chips_16.11.08.log
+|               Send_chips_16.49.22.log
+|               
++---Mapeamentos
+|   |   testBaseCommands.txt
+|   |   
+|   +---pokerbros
+|   |   +---Act
+|   |   |       send_chips.txt
+|   |   |       
+|   |   +---Nav
+|   |   |       contador.txt
+|   |   |       
+|   |   \---Ret
+|   |           contador.txt
+|   |           
+|   +---pppoker
+|   |   +---Act
+|   |   |       receive_chips.txt
+|   |   |       send_chips.txt
+|   |   |       
+|   |   +---Base
+|   |   |       Base.txt
+|   |   |       
+|   |   +---Nav
+|   |   |       contador.txt
+|   |   |       membros.txt
+|   |   |       transacoes.txt
+|   |   |       
+|   |   \---Ret
+|   |           contador.txt
+|   |           
+|   \---supremapoker
+|       +---Act
+|       |       receive_chips.txt
+|       |       send_chips.txt
+|       |       transaction.txt
+|       |       
+|       +---Base
+|       |       Base.txt
+|       |       
+|       +---Nav
+|       |       contador.txt
+|       |       membros.txt
+|       |       transacoes.txt
+|       |       
+|       \---Ret
+|               contador.txt
+|               membros.txt
+|               
++---nginx-1.28.0
+|   \---nginx-1.28.0
+|       |   fastcgi.conf
+|       |   fastcgi_params
+|       |   koi-utf
+|       |   koi-win
+|       |   mime.types
+|       |   nginx.conf
+|       |   nginx.conf.j2
+|       |   nginx.exe
+|       |   scgi_params
+|       |   uwsgi_params
+|       |   win-utf
+|       |   
+|       +---conf
+|       |       fastcgi.conf
+|       |       fastcgi_params
+|       |       koi-utf
+|       |       koi-win
+|       |       mime.types
+|       |       nginx.conf
+|       |       nginx.conf.j2
+|       |       scgi_params
+|       |       uwsgi_params
+|       |       win-utf
+|       |       
+|       +---contrib
+|       |   |   geo2nginx.pl
+|       |   |   README
+|       |   |   
+|       |   +---unicode2nginx
+|       |   |       koi-utf
+|       |   |       unicode-to-nginx.pl
+|       |   |       win-utf
+|       |   |       
+|       |   \---vim
+|       |       +---ftdetect
+|       |       |       nginx.vim
+|       |       |       
+|       |       +---ftplugin
+|       |       |       nginx.vim
+|       |       |       
+|       |       +---indent
+|       |       |       nginx.vim
+|       |       |       
+|       |       \---syntax
+|       |               nginx.vim
+|       |               
+|       +---docs
+|       |       CHANGES
+|       |       CHANGES.ru
+|       |       CODE_OF_CONDUCT.md
+|       |       CONTRIBUTING.md
+|       |       LICENSE
+|       |       OpenSSL.LICENSE
+|       |       PCRE.LICENCE
+|       |       README.md
+|       |       SECURITY.md
+|       |       zlib.LICENSE
+|       |       
+|       +---html
+|       |       50x.html
+|       |       index.html
+|       |       
+|       +---logs
+|       |       access.log
+|       |       error.log
+|       |       nginx.pid
+|       |       
+|       \---temp
+|           +---client_body_temp
+|           +---fastcgi_temp
+|           +---proxy_temp
+|           +---scgi_temp
+|           +---u wsgi_temp
+|           \---uwsgi_temp
++---read_imgs
+|   +---pppoker
+|   |       Send_ch.png
+|   |       
+|   \---supremapoker
+|           Receive_ch.png
+|           Send_ch.png
+|           Transact.png
+|           
++---tests
+|       mock_Constants.py
+|       mock_robo.py
+|       mock_task.py
+|       mock_utils.py
+|       test_celery_priority.py
+|       
+\---treated_imgs
+    +---pppoker
+    |       Send_ch.png
+    |       
+    \---supremapoker
+            Receive_ch.png
+            Send_ch.png
+            Transact.png
+            
+
+
+
+
+-------------------------------------------------------------
+
+Key entry points:
+
+Below, the info provided by the Dev Team about how to start the Robo:
+
+1) start Docker Desktop ; without this, the Robo can't access Redis
+
+2) execute run.bat ; this will start/configure: the Nginx server; the main.py module; the webhook.py server
+
+3) paste the action (send/receive chips) into the body window of Postman
+
+
+
+---------------------------------------------
+
+Examples of actions to be pasted in Postman.
+
+Notice first that each App (PPPoker/Suprema/Pokerbros) can host more than one Club (Club1, testeypc4, etc; Clubs in different Apps can have the same name).
+The current version still can't handle a Club Selection (the Robo will click only at the Club at the top of a list).
+The commands below include the attribute "club", but it still is not used.
+
+[{
+    "app": "supremapoker",
+    "club": "testeypc4",
+    "action": "send_chips", 
+    "id": 1463745,
+    "chipamount":1
+},
+{
+    "app": "supremapoker",
+    "club": "testeypc4",
+    "action": "receive_chips",
+    "id": 1308023,
+    "chipamount":2
+}
+]
+
+
+
+
+[{
+    "app": "pppoker",
+    "club": "testeypc2",
+    "action": "send_chips", 
+    "id": 11257462,
+    "chipamount":10
+},
+{
+    "app": "pppoker",
+    "club": "testeypc2",
+    "action": "receive_chips",
+    "id": 13002613,
+    "chipamount":21
+}
+]
+

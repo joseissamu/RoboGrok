@@ -1,0 +1,20 @@
+include mime.types;
+
+map $uri $porta_backend_action {
+    {% for i in range(1, numero_de_robos+1) %}
+        ~^/robo{{ i }}/action(/|$) {{ 5000 + i }};
+    {% endfor %}
+}
+
+server {
+    listen 80;
+
+    location ~ ^/robo[1-{{numero_de_robos}}]/action {
+        proxy_pass http://127.0.0.1:$porta_backend_action/questions/action;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+}

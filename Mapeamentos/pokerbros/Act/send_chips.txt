@@ -1,0 +1,130 @@
+[
+    {
+        "action": "click",
+        "position": [
+            0.4123456790123457,
+            0.23194444444444445
+        ],
+        "condition": null
+    },
+    {
+        "action": "clear",
+        "position": [
+            0,
+            0
+        ]
+    },
+    {
+        "action": "click",
+        "position": [
+            0.45925925925925926,
+            0.23333333333333334
+        ],
+        "condition": null
+    },
+    {
+        "action": "clear",
+        "position": [
+            0,
+            0
+        ]
+    },
+    {
+        "action": "write",
+        "position": [
+            0,
+            0
+        ],
+        "value": ".ID"
+    },
+    {
+        "action": "color",
+        "position": [
+            0.4444444444444444,
+            0.4097222222222222
+        ],
+        "value": [
+            0,
+            0,
+            0
+        ]
+    },
+    {
+        "action": "click",
+        "position": [
+            0.8691358024691358,
+            0.3375
+        ],
+        "condition": null
+    },
+    {
+        "action": "color",
+        "position": [
+            0.8469135802469135,
+            0.3388888888888889
+        ],
+        "value": [
+            239,
+            161,
+            68
+        ]
+    },
+    {
+        "action": "click",
+        "position": [
+            0.23950617283950618,
+            0.8625
+        ],
+        "condition": null
+    },
+    {
+        "action": "color",
+        "position": [
+            0.6246913580246913,
+            0.8263888888888888
+        ],
+        "value": [
+            239,
+            161,
+            68
+        ]
+    },
+    {
+        "action": "click",
+        "position": [
+            0.3135802469135803,
+            0.175
+        ],
+        "condition": null
+    },
+    {
+        "action": "write",
+        "position": [
+            0,
+            0
+        ],
+        "value": ".CHIPAMOUNT"
+    },
+    {
+        "action": "click",
+        "position": [
+            0.5234567901234568,
+            0.8291666666666667
+        ],
+        "condition": null
+    },
+    {
+        "action": "read",
+        "position": [
+            [
+                0.6814814814814815,
+                0.3194444444444444
+            ],
+            [
+                0.8197530864197531,
+                0.35833333333333334
+            ]
+        ],
+        "value": "Saldo"
+    }
+]

@@ -1,0 +1,17 @@
+.env
+*.lnk
+*.log
+*.xlsx
+/env
+*.pyc
+
+.pylintrc
+.mypy_cache
+venv
+.vscode
+log
+
+__pycache__
+
+runvenv.bat
+mypy.ini

@@ -1,0 +1,106 @@
+[
+    {
+        "action": "color",
+        "position": [
+            0.508641975308642,
+            0.19722222222222222
+        ],
+        "value": [
+            239,
+            161,
+            68
+        ]
+    },
+    {
+        "action": "click",
+        "position": [
+            0.5111111111111111,
+            0.36666666666666664
+        ],
+        "condition": null
+    },
+    {
+        "action": "clear",
+        "position": [
+            0,
+            0
+        ]
+    },
+    {
+        "action": "write",
+        "position": [
+            0,
+            0
+        ],
+        "value": "$USER"
+    },
+    {
+        "action": "click",
+        "position": [
+            0.38271604938271603,
+            0.4666666666666667
+        ],
+        "condition": null
+    },
+    {
+        "action": "clear",
+        "position": [
+            0,
+            0
+        ]
+    },
+    {
+        "action": "write",
+        "position": [
+            0,
+            0
+        ],
+        "value": "$PASSWORD"
+    },
+    {
+        "action": "click",
+        "position": [
+            0.8074074074074075,
+            0.46111111111111114
+        ],
+        "condition": null
+    },
+    {
+        "action": "click",
+        "position": [
+            0.6098765432098765,
+            0.7055555555555556
+        ],
+        "condition": [
+            [
+                0.6123456790123457,
+                0.7069444444444445
+            ],
+            [
+                239,
+                161,
+                68
+            ]
+        ]
+    },
+    {
+        "action": "color",
+        "position": [
+            0.8654283950617284,
+            0.026555555555555555
+        ],
+        "value": [
+            219,
+            159,
+            76
+        ]
+    },
+    {
+        "action": "click",
+        "position": [
+            0.528395061728395,
+            0.3902777777777778
+        ],
+        "condition": null
+    }
+]

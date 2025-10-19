@@ -1,0 +1,35 @@
+docker compose up --build -d
+
+o -d faz rodar em segundo plano. Entao depois desse comando, o broker Redis estará rodando normalmente e
+estará acessível em localhost:6379. Isso pode ser verificado entrando em localhost:8081, que é onde o redis-commander está.
+
+Para iniciar os workers:
+primeiro defina o numero maximo de workers:
+(Bash)      export N_BOTS=5
+(PShell)    $env: N_BOTS = "5"
+(cmd)       set N_BOTS=5
+
+por mais que tenhamos passado NBOTS como variavel de ambiente quando vamos iniciar a main,
+temos que especificar quais workers vamos ter ativos.
+Assim:
+para iniciar o worker do bot_1
+    celery -A task worker -Q bot_1 --loglevel=info --pool=solo
+para iniciar o worker do bot_2
+    celery -A task worker -Q bot_1 --loglevel=info --pool=solo
+para iniciar o worker do bot_3
+    celery -A task worker -Q bot_1 --loglevel=info --pool=solo
+[...]
+
+
+para iniciar a aplicacao Flask:
+python3 main.py
+
+----------------------------------------
+
+Como está funcionando o fluxo de dados??
+
+* uma requisicao HTTP chega ao nginx em http://localhost:8080/robo/2/questions/input
+* o nginx repassa para o Flask
+* o Flask captura o bot_id
+* e cria uma tarefa correspondente e coloca na fila correspondente do redis
+* o worker correspondente executa a tarefa

@@ -1,0 +1,21 @@
+criar uma pasta html onde ficarao os templates OK
+
+criar uma pasta chamada api e criar um Dockerfile OK
+Esse Dockerfile tem que, alem de "herdar" nginx OK, iniciar a configuracao do
+.conf do nginx OK. Essa configuracao é feita com um .conf.j2  OK que é alterado por
+um script em python OK e recebe como parâmetro o numero de portas que serão
+abertas. OK
+Ideia:
+usar volumes para compartilhar os arquivos .conf.j2 OK e setup.py OK que estao no
+host com o container. Receber um argumento no build com a informacao de
+quantos bots e portas é o máximo OK. Com tudo isso, rodar um script
+em python para gerar o .conf OK e colocá-lo na pasta correta. OK
+
+
+$(pwd)/nginx_template tem o arquivo default.conf.j2
+. contém o arquivo setup.py
+dentro do container, o default.conf deve ser enviado para /etc/nginx/conf.d/
+
+
+rodar:
+docker container run -d --name api_container -p 8080:80 -v $(pwd)/html:/usr/share/nginx/html api_container_image

@@ -1,0 +1,14 @@
+# docker-compose.yml
+services:
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379" # Mapeia a porta do container para o seu localhost
+  redis-commander:
+    image: rediscommander/redis-commander
+    ports:
+      - "8081:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    depends_on:
+      - redis
