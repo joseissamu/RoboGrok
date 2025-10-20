@@ -8,7 +8,7 @@ O Robo Yamada é um sistema criado para automatizar ações do aplicativo Pppoke
 
 ---
 
-## Como usar   ;
+## Como usar
 ### Configurando o Ambiente
 Instale as dependências necessárias com o seguinte comando:
 
