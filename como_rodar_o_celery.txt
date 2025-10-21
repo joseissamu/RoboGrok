@@ -33,3 +33,7 @@ Como está funcionando o fluxo de dados??
 * o Flask captura o bot_id
 * e cria uma tarefa correspondente e coloca na fila correspondente do redis
 * o worker correspondente executa a tarefa
+
+
+
+texto para testar o github
